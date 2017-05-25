@@ -1,4 +1,30 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+group='lib.kashifo'
+
+ext {
+    bintrayRepo = 'android-folder-picker-library'
+    bintrayName = 'android-folder-picker-library'
+
+    publishedGroupId = 'lib.kashif'
+    libraryName = 'android-folder-picker-library'
+    artifact = 'folder-picker'
+
+    libraryDescription = 'An library that can be quickly integrated in any app to let users choose folder.'
+
+    siteUrl = 'https://github.com/kashifo/android-folder-picker-library'
+    gitUrl = 'https://github.com/kashifo/android-folder-picker-library.git'
+
+    libraryVersion = '2.0'
+
+    developerId = 'kashifo'
+    developerName = 'Kashif Anwaar'
+    developerEmail = 'koderkashif@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
 
 android {
     compileSdkVersion 25
@@ -28,3 +54,7 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
 }
+
+//To publish library to bintray
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
