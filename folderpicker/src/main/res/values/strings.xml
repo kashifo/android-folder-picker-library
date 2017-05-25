@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Folder Picker</string>
+    <string name="up">Up</string>
+    <string name="neww">New</string>
+    <string name="select">Select</string>
+    <string name="cancel">Cancel</string>
+    <string name="title">Select Folder</string>
+    <string name="location">Location</string>
+    <string name="allow_storage_permission">Allow permissions to view files</string>
+</resources>
