@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-group='lib.kashifo'
 
 ext {
     bintrayRepo = 'android-folder-picker-library'
@@ -8,14 +7,13 @@ ext {
 
     publishedGroupId = 'lib.kashif'
     libraryName = 'android-folder-picker-library'
-    artifact = 'folder-picker'
+    artifact = 'folderpicker'
+    libraryVersion = '2.0'
 
     libraryDescription = 'An library that can be quickly integrated in any app to let users choose folder.'
 
     siteUrl = 'https://github.com/kashifo/android-folder-picker-library'
     gitUrl = 'https://github.com/kashifo/android-folder-picker-library.git'
-
-    libraryVersion = '2.0'
 
     developerId = 'kashifo'
     developerName = 'Kashif Anwaar'
