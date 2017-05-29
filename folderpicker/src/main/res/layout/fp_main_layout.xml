@@ -18,7 +18,7 @@
         android:id="@+id/fp_tv_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_title"
+        android:layout_below="@+id/fp_tv_title"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
         android:gravity="left"
@@ -31,7 +31,7 @@
         android:id="@+id/fp_buttonsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_location"
+        android:layout_below="@+id/fp_tv_location"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="5sp">
@@ -47,7 +47,9 @@
             android:gravity="center"
             android:onClick="goBack"
             android:padding="5dp"
-            android:text="@string/up" />
+            android:text="@string/up"
+            android:textColor="#333"
+            />
 
         <TextView
             android:id="@+id/fp_btn_new"
@@ -61,7 +63,9 @@
             android:gravity="center"
             android:onClick="newFolderDialog"
             android:padding="5dp"
-            android:text="@string/neww" />
+            android:text="@string/neww"
+            android:textColor="#333"
+            />
 
         <TextView
             android:id="@+id/fp_btn_select"
@@ -75,7 +79,9 @@
             android:gravity="center"
             android:onClick="select"
             android:padding="5dp"
-            android:text="@string/select" />
+            android:text="@string/select"
+            android:textColor="#333"
+            />
 
         <TextView
             android:layout_width="0dp"
@@ -87,7 +93,9 @@
             android:gravity="center"
             android:onClick="cancel"
             android:padding="5dp"
-            android:text="@string/cancel" />
+            android:text="@string/cancel"
+            android:textColor="#333"
+            />
 
     </LinearLayout>
 
@@ -96,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/buttonsLayout">
+        android:layout_below="@+id/fp_buttonsLayout">
 
     </ListView>
 
