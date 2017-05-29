@@ -37,6 +37,11 @@ public class FolderPicker extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fp_main_layout);
 
+        if( !isExternalStorageReadable() ){
+            Toast.makeText(this, "Storage access permission not given", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         tv_title = (TextView) findViewById(R.id.fp_tv_title);
         tv_location = (TextView) findViewById(R.id.fp_tv_location);
 
@@ -69,6 +74,15 @@ public class FolderPicker extends Activity {
 
     }
 
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
 
     public void loadLists(String location) {
         try {
