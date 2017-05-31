@@ -39,7 +39,7 @@ public class FolderPicker extends Activity {
 
         if( !isExternalStorageReadable() ){
             Toast.makeText(this, "Storage access permission not given", Toast.LENGTH_LONG).show();
-            return;
+            finish();
         }
 
         tv_title = (TextView) findViewById(R.id.fp_tv_title);
@@ -48,22 +48,28 @@ public class FolderPicker extends Activity {
         try {
             receivedIntent = getIntent();
 
-            String receivedTitle = receivedIntent.getExtras().getString("title");
-            if(receivedTitle!=null) {
-                tv_title.setText(receivedTitle);
+            if( receivedIntent.hasExtra("title") ) {
+                String receivedTitle = receivedIntent.getExtras().getString("title");
+                if (receivedTitle != null) {
+                    tv_title.setText(receivedTitle);
+                }
             }
 
-            String reqLocation = receivedIntent.getExtras().getString("location");
-            if(reqLocation!=null){
-                File requestedFolder = new File(reqLocation);
-                if( requestedFolder.exists() )
-                    location = reqLocation;
+            if( receivedIntent.hasExtra("location") ) {
+                String reqLocation = receivedIntent.getExtras().getString("location");
+                if (reqLocation != null) {
+                    File requestedFolder = new File(reqLocation);
+                    if (requestedFolder.exists())
+                        location = reqLocation;
+                }
             }
 
-            pickFiles = receivedIntent.getExtras().getBoolean("pickFiles");
-            if(pickFiles){
-                findViewById(R.id.fp_btn_select).setVisibility(View.GONE);
-                findViewById(R.id.fp_btn_new).setVisibility(View.GONE);
+            if( receivedIntent.hasExtra("pickFiles") ) {
+                pickFiles = receivedIntent.getExtras().getBoolean("pickFiles");
+                if (pickFiles) {
+                    findViewById(R.id.fp_btn_select).setVisibility(View.GONE);
+                    findViewById(R.id.fp_btn_new).setVisibility(View.GONE);
+                }
             }
 
         } catch (Exception e) {
@@ -88,6 +94,10 @@ public class FolderPicker extends Activity {
         try {
 
             File folder = new File(location);
+
+            if( !folder.isDirectory() )
+                return;
+
             tv_location.setText( "Location : "+ folder.getAbsolutePath() );
             File[] files = folder.listFiles();
 
@@ -168,10 +178,12 @@ public class FolderPicker extends Activity {
 
     public void goBack(View v) {
 
-        int start = location.lastIndexOf('/');
-        String newLocation = location.substring(0, start);
-        location = newLocation;
-        loadLists(location);
+        if( location!=null && !location.equals("") && !location.equals("/") ) {
+            int start = location.lastIndexOf('/');
+            String newLocation = location.substring(0, start);
+            location = newLocation;
+            loadLists(location);
+        }
 
     }
 

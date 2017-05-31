@@ -11,7 +11,9 @@
         android:gravity="center"
         android:padding="5dp"
         android:text="@string/title"
-        android:textAppearance="?android:textAppearanceLarge" />
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="#333"
+        />
 
 
     <TextView
@@ -24,7 +26,9 @@
         android:gravity="left"
         android:padding="5dp"
         android:text="Current Location"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#333"
+        />
 
 
     <LinearLayout

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -8,24 +8,49 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="lib.folderpicker.demo.MainActivity">
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="lib.folderpicker.demo.MainActivity"
+    >
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:onClick="pickFolder"
+        android:padding="20dp"
+        android:text="@string/select_folder" />
+
+    <TextView
+        android:id="@+id/tv_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="@string/folder_not_selected" />
+
+    <Button
+        android:id="@+id/btn_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:onClick="pickFile"
-        android:padding="20sp"
-        android:text="@string/select_folder" />
+        android:padding="20dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/select_file" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="@string/folder_not_selected" />
-</RelativeLayout>
+        android:layout_marginTop="5dp"
+        android:text="@string/file_not_selected" />
+
+
+</LinearLayout>

@@ -27,6 +27,7 @@
         android:layout_toRightOf="@+id/iv_icon"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#333"
+        android:text="No Name"
         />
 
 </LinearLayout>
