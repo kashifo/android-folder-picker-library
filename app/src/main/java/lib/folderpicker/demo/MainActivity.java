@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Optional
 
-        intent.putExtra("title", "Select your backup folder");
+        intent.putExtra("title", "Select file to upload");
         intent.putExtra("location", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
         intent.putExtra("pickFiles", true);
 
