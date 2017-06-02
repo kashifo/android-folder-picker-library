@@ -1,6 +1,7 @@
 # android-folder-picker-library
+[![Demo](https://img.shields.io/badge/Demo%20APK-2.2-blue.svg)](https://github.com/kashifo/android-folder-picker-library/releases/download/v2.2/FolderPickerDemo_v2.2.apk)
+[![Bintray](https://img.shields.io/badge/Bintray-2.2-blue.svg)](https://bintray.com/kashifo/android-folder-picker-library/android-folder-picker-library/_latestVersion)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[ ![Download](https://api.bintray.com/packages/kashifo/android-folder-picker-library/android-folder-picker-library/images/download.svg) ](https://bintray.com/kashifo/android-folder-picker-library/android-folder-picker-library/_latestVersion)
 
 A light-weight android library that can be quickly integrated into any app to let users choose folder, also files (but esp built for folders).
 
@@ -29,9 +30,11 @@ For your convenience, it is available on jCenter, So just add this in your app d
 **To pick folder**
 
 ```java
-
         Intent intent = new Intent(this, FolderPicker.class);
-        startActivityForResult(intent, FILEPICKER_CODE);
+        startActivityForResult(intent, FILEPICKER_CODE);        
+```
+
+```java
         
         protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
           if (requestCode == FILEPICKER_CODE && resultCode == Activity.RESULT_OK) {
@@ -59,3 +62,5 @@ For your convenience, it is available on jCenter, So just add this in your app d
         intent.putExtra("pickFiles", true);
         
   ```
+  
+[Click to see an example working code](https://github.com/kashifo/android-folder-picker-library/blob/master/app/src/main/java/lib/folderpicker/demo/MainActivity.java)
