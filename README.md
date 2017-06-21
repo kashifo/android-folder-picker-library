@@ -64,6 +64,9 @@ Cusstomization options can be passed as extras to FolderPicker activity.
         
         //To pick files
         intent.putExtra("pickFiles", true);
+
+        //To set on landscape mode
+        intent.putExtra("landscape", true);
         
   ```
   
