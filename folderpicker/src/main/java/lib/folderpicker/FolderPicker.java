@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -69,6 +70,13 @@ public class FolderPicker extends Activity {
                 if (pickFiles) {
                     findViewById(R.id.fp_btn_select).setVisibility(View.GONE);
                     findViewById(R.id.fp_btn_new).setVisibility(View.GONE);
+                }
+            }
+
+            if( receivedIntent.hasExtra("landscape") ) {
+                boolean landscape = receivedIntent.getExtras().getBoolean("landscape");
+                if (landscape) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 }
             }
 
