@@ -16,14 +16,14 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class FolderPicker extends Activity {
 
-    ArrayList<String> namesList;
-    ArrayList<String> typesList;
-
-    ArrayList<String> foldersList;
-    ArrayList<String> filesList;
+    //Folders and Files have separate lists because we show all folders first then files
+    ArrayList<FilePojo> folderAndFileList;
+    ArrayList<FilePojo> foldersList;
+    ArrayList<FilePojo> filesList;
 
     TextView tv_title;
     TextView tv_location;
@@ -37,7 +37,7 @@ public class FolderPicker extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fp_main_layout);
 
-        if( !isExternalStorageReadable() ){
+        if (!isExternalStorageReadable()) {
             Toast.makeText(this, "Storage access permission not given", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -48,14 +48,14 @@ public class FolderPicker extends Activity {
         try {
             receivedIntent = getIntent();
 
-            if( receivedIntent.hasExtra("title") ) {
+            if (receivedIntent.hasExtra("title")) {
                 String receivedTitle = receivedIntent.getExtras().getString("title");
                 if (receivedTitle != null) {
                     tv_title.setText(receivedTitle);
                 }
             }
 
-            if( receivedIntent.hasExtra("location") ) {
+            if (receivedIntent.hasExtra("location")) {
                 String reqLocation = receivedIntent.getExtras().getString("location");
                 if (reqLocation != null) {
                     File requestedFolder = new File(reqLocation);
@@ -64,7 +64,7 @@ public class FolderPicker extends Activity {
                 }
             }
 
-            if( receivedIntent.hasExtra("pickFiles") ) {
+            if (receivedIntent.hasExtra("pickFiles")) {
                 pickFiles = receivedIntent.getExtras().getBoolean("pickFiles");
                 if (pickFiles) {
                     findViewById(R.id.fp_btn_select).setVisibility(View.GONE);
@@ -81,7 +81,7 @@ public class FolderPicker extends Activity {
     }
 
     /* Checks if external storage is available to at least read */
-    public boolean isExternalStorageReadable() {
+    boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state) ||
                 Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
@@ -90,46 +90,39 @@ public class FolderPicker extends Activity {
         return false;
     }
 
-    public void loadLists(String location) {
+    void loadLists(String location) {
         try {
 
             File folder = new File(location);
 
-            if( !folder.isDirectory() )
-                return;
+            if (!folder.isDirectory())
+                exit();
 
-            tv_location.setText( "Location : "+ folder.getAbsolutePath() );
+            tv_location.setText("Location : " + folder.getAbsolutePath());
             File[] files = folder.listFiles();
 
             foldersList = new ArrayList<>();
             filesList = new ArrayList<>();
 
-            for ( File currentFile : files ) {
+            for (File currentFile : files) {
                 if (currentFile.isDirectory()) {
-                    foldersList.add(currentFile.getName());
+                    FilePojo filePojo = new FilePojo(currentFile.getName(), true);
+                    foldersList.add(filePojo);
                 } else {
-                    filesList.add(currentFile.getName());
+                    FilePojo filePojo = new FilePojo(currentFile.getName(), false);
+                    filesList.add(filePojo);
                 }
             }
 
-            // sort & add to final List
-            Collections.sort(foldersList);
-            namesList = new ArrayList<>();
-            namesList.addAll(foldersList);
+            // sort & add to final List - as we show folders first add folders first to the final list
+            Collections.sort(foldersList, comparatorAscending);
+            folderAndFileList = new ArrayList<>();
+            folderAndFileList.addAll(foldersList);
 
-            // add types
-            typesList = new ArrayList<>();
-
-            for (int i = 0; i < foldersList.size(); i++)
-                typesList.add("folder");
-
+            //if we have to show files, then add files also to the final list
             if (pickFiles) {
-                Collections.sort(filesList);
-
-                namesList.addAll(filesList);
-
-                for (int i = 0; i < filesList.size(); i++)
-                    typesList.add("file");
+                Collections.sort( filesList, comparatorAscending );
+                folderAndFileList.addAll(filesList);
             }
 
             showList();
@@ -140,14 +133,23 @@ public class FolderPicker extends Activity {
 
     } // load List
 
-    public void showList() {
+
+    Comparator<FilePojo> comparatorAscending = new Comparator<FilePojo>() {
+        @Override
+        public int compare(FilePojo f1, FilePojo f2) {
+            return f1.getName().compareTo(f2.getName());
+        }
+    };
+
+
+    void showList() {
 
         try {
-            simpleadapter sa = new simpleadapter(this, namesList, typesList);
-            ListView lv = (ListView) findViewById(R.id.fp_listView);
-            lv.setAdapter(sa);
+            FolderAdapter FolderAdapter = new FolderAdapter(this, folderAndFileList);
+            ListView listView = (ListView) findViewById(R.id.fp_listView);
+            listView.setAdapter(FolderAdapter);
 
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
@@ -162,32 +164,44 @@ public class FolderPicker extends Activity {
     }
 
 
-    public void listClick(int position) {
+    void listClick(int position) {
 
-        if ( pickFiles && typesList.get(position).equals("file")) {
-            String data = location + File.separator + namesList.get(position);
+        if (pickFiles && !folderAndFileList.get(position).isFolder()) {
+            String data = location + File.separator + folderAndFileList.get(position).getName();
             receivedIntent.putExtra("data", data);
             setResult(RESULT_OK, receivedIntent);
             finish();
         } else {
-            location = location + File.separator + namesList.get(position);
+            location = location + File.separator + folderAndFileList.get(position).getName();
             loadLists(location);
         }
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        goBack(null);
     }
 
     public void goBack(View v) {
 
-        if( location!=null && !location.equals("") && !location.equals("/") ) {
+        if (location != null && !location.equals("") && !location.equals("/")) {
             int start = location.lastIndexOf('/');
             String newLocation = location.substring(0, start);
             location = newLocation;
             loadLists(location);
+        }else{
+            exit();
         }
 
     }
 
-    public void newFolder(String filename) {
+    void exit(){
+        setResult(RESULT_CANCELED, receivedIntent);
+        finish();
+    }
+
+    void createNewFolder(String filename) {
         try {
 
             File file = new File(location + File.separator + filename);
@@ -213,7 +227,7 @@ public class FolderPicker extends Activity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        newFolder(et.getText().toString());
+                        createNewFolder(et.getText().toString());
                     }
                 });
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
@@ -242,7 +256,7 @@ public class FolderPicker extends Activity {
 
 
     public void cancel(View v) {
-        finish();
+        exit();
     }
 
 

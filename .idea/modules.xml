@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FolderPickerDemo.iml" filepath="$PROJECT_DIR$/FolderPickerDemo.iml" />
+      <module fileurl="file://E:\Dev\Android\Projects\android-folder-picker-library\FolderPickerDemo.iml" filepath="E:\Dev\Android\Projects\android-folder-picker-library\FolderPickerDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-folder-picker-library.iml" filepath="$PROJECT_DIR$/android-folder-picker-library.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/folderpicker/folderpicker.iml" filepath="$PROJECT_DIR$/folderpicker/folderpicker.iml" />
     </modules>

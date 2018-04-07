@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.0"
     defaultConfig {
         applicationId "lib.folderpicker.demo"
         minSdkVersion 9
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 3
         versionName "2.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

@@ -10,38 +10,37 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class simpleadapter extends ArrayAdapter<String> {
+public class FolderAdapter extends ArrayAdapter<FilePojo> {
 
 	Activity context;
-	ArrayList<String> namesList;
-	ArrayList<String> typesList;
+	ArrayList<FilePojo> dataList;
 
-	public simpleadapter(Activity context, ArrayList<String> namesList, ArrayList<String> typesList) {
-		super(context, R.layout.filerow, namesList);
+	public FolderAdapter(Activity context, ArrayList<FilePojo> dataList) {
 
+		super(context, R.layout.fp_filerow, dataList);
 		this.context = context;
-		this.namesList = namesList;
-		this.typesList = typesList;
+		this.dataList = dataList;
+
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = context.getLayoutInflater();
-		convertView = inflater.inflate(R.layout.filerow, parent, false);
+		convertView = inflater.inflate(R.layout.fp_filerow, parent, false);
 
 		ImageView imageView = (ImageView) convertView.findViewById(R.id.fp_iv_icon);
 		TextView name = (TextView) convertView.findViewById(R.id.fp_tv_name);
 		
-		if( typesList.get(position).equals("folder") )
+		if( dataList.get(position).isFolder() )
 		{
-			imageView.setImageResource( R.drawable.folder );
+			imageView.setImageResource( R.drawable.fp_folder);
 		}
 		else
 		{
-			imageView.setImageResource( R.drawable.file );
+			imageView.setImageResource( R.drawable.fp_file);
 		}
 
-		name.setText( namesList.get(position) );
+		name.setText( dataList.get(position).getName() );
 
 		return convertView;
 	}
