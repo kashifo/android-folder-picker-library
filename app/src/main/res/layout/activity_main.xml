@@ -4,31 +4,23 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     android:gravity="center"
-    tools:context="lib.folderpicker.demo.MainActivity"
-    >
+    android:orientation="vertical"
+    android:padding="@dimen/activity_vertical_margin"
+    tools:context="lib.folderpicker.demo.MainActivity">
 
     <Button
         android:id="@+id/btn_folder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:onClick="pickFolder"
         android:padding="20dp"
-        android:text="@string/select_folder" />
+        android:text="@string/select_folder"
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/tv_folder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:text="@string/folder_not_selected" />
 
@@ -36,21 +28,16 @@
         android:id="@+id/btn_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:onClick="pickFile"
-        android:padding="20dp"
         android:layout_marginTop="25dp"
-        android:text="@string/select_file" />
+        android:padding="20dp"
+        android:text="@string/select_file"
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/tv_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:text="@string/file_not_selected" />
-
 
 </LinearLayout>

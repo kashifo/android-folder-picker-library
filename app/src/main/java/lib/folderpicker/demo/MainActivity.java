@@ -10,105 +10,68 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import lib.folderpicker.FolderPicker;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int SDCARD_PERMISSION_FOLDER = 12,
-            SDCARD_PERMISSION_FILE = 123,
-            FOLDER_PICKER_CODE = 78,
-            FILE_PICKER_CODE = 786;
+    private static final int SDCARD_PERMISSION = 1,
+            FOLDER_PICKER_CODE = 2,
+            FILE_PICKER_CODE = 3;
 
-    TextView tv_folderPath, tv_filePath;
+    TextView tvFolder, tvFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tv_folderPath = (TextView) findViewById(R.id.tv_folder);
-        tv_filePath = (TextView) findViewById(R.id.tv_file);
+        checkStoragePermission();
+        initUI();
     }
 
-    public void pickFolder(View v) {
-        pickFolderOrFile(true);
-    }
+    void checkStoragePermission() {
 
-    public void pickFile(View v) {
-        pickFolderOrFile(false);
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-    void pickFolderOrFile(boolean folder) {
+            //Write permission is required so that folder picker can create new folder.
+            //If you just want to pick files, Read permission is enough.
 
-        if (Build.VERSION.SDK_INT < 23) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
 
-            if (folder)
-                pickFolder();
-            else
-                pickFile();
-
-        } else {
-
-            if (storagePermissionAvailable()) {
-
-                if (folder)
-                    pickFolder();
-                else
-                    pickFile();
-
-            } else {
-                if (folder) {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            SDCARD_PERMISSION_FOLDER);
-                } else {
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            SDCARD_PERMISSION_FILE);
-                }
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        SDCARD_PERMISSION);
             }
-
         }
 
     }
 
-    boolean storagePermissionAvailable() {
-        // For api Level 23 and above.
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        } else {
-            return true;
-        }
+    void initUI() {
+
+        findViewById(R.id.btn_folder).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickFolder();
+            }
+        });
+
+        findViewById(R.id.btn_file).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickFile();
+            }
+        });
+
+        tvFolder = (TextView) findViewById(R.id.tv_folder);
+        tvFile = (TextView) findViewById(R.id.tv_file);
+
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case SDCARD_PERMISSION_FOLDER:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    pickFolder();
-
-                }
-                break;
-
-            case SDCARD_PERMISSION_FILE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    pickFile();
-
-                }
-                break;
-        }
-    }
-
 
     void pickFolder() {
         Intent intent = new Intent(this, FolderPicker.class);
@@ -119,11 +82,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FolderPicker.class);
 
         //Optional
-
         intent.putExtra("title", "Select file to upload");
         intent.putExtra("location", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
         intent.putExtra("pickFiles", true);
-
         //Optional
 
         startActivityForResult(intent, FILE_PICKER_CODE);
@@ -131,13 +92,27 @@ public class MainActivity extends AppCompatActivity {
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == FOLDER_PICKER_CODE && resultCode == Activity.RESULT_OK) {
-            String folderLocation = intent.getExtras().getString("data");
-            tv_folderPath.setText(folderLocation);
-        } else if (requestCode == FILE_PICKER_CODE && resultCode == Activity.RESULT_OK) {
-            String folderLocation = intent.getExtras().getString("data");
-            tv_filePath.setText(folderLocation);
+
+        if (requestCode == FOLDER_PICKER_CODE) {
+
+            if (resultCode == Activity.RESULT_OK && intent.hasExtra("data")) {
+                String folderLocation = "<b>Selected Folder: </b>"+ intent.getExtras().getString("data");
+                tvFolder.setText( Html.fromHtml(folderLocation) );
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                tvFolder.setText(R.string.folder_pick_cancelled);
+            }
+
+        } else if (requestCode == FILE_PICKER_CODE) {
+
+            if (resultCode == Activity.RESULT_OK && intent.hasExtra("data")) {
+                String fileLocation = "<b>Selected File: </b>"+ intent.getExtras().getString("data");
+                tvFile.setText( Html.fromHtml(fileLocation) );
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                tvFile.setText(R.string.file_pick_cancelled);
+            }
+
         }
+
     }
 
 }
