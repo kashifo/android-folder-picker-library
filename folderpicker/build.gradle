@@ -8,9 +8,9 @@ ext {
     publishedGroupId = 'lib.kashif'
     libraryName = 'android-folder-picker-library'
     artifact = 'folderpicker'
-    libraryVersion = '2.2'
+    libraryVersion = '2.4'
 
-    libraryDescription = 'An android library that can be quickly integrated in any app to let users choose folder and also files.'
+    libraryDescription = 'A lightweight android library for picking folders and files.'
 
     siteUrl = 'https://github.com/kashifo/android-folder-picker-library'
     gitUrl = 'https://github.com/kashifo/android-folder-picker-library.git'
@@ -31,8 +31,8 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 27
-        versionCode 3
-        versionName "2.2"
+        versionCode 4
+        versionName "2.4"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
