@@ -1,15 +1,14 @@
 # android-folder-picker-library
-[![Demo](https://img.shields.io/badge/Demo%20APK-2.2-blue.svg)](https://github.com/kashifo/android-folder-picker-library/releases/download/v2.2/FolderPickerDemo_v2.2.apk)
-[![Bintray](https://img.shields.io/badge/Bintray-2.2-blue.svg)](https://bintray.com/kashifo/android-folder-picker-library/android-folder-picker-library/_latestVersion)
+[![Demo](https://img.shields.io/badge/Demo%20APK-2.4-blue.svg)](https://github.com/kashifo/android-folder-picker-library/releases/download/v2.4/FolderPickerDemo_v2.4.apk)
+[![Bintray](https://img.shields.io/badge/Bintray-2.4-blue.svg)](https://bintray.com/kashifo/android-folder-picker-library/android-folder-picker-library/_latestVersion)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-android--folder--picker--library-blue.svg?style=flat)](https://android-arsenal.com/details/1/5837)
 
-A light-weight android library that can be quickly integrated into any app to let users choose folder, also files (but esp built for folders).
+A light-weight android library to let user's pick folder / files from storage.
 
-# Example Uses
-- To let users choose folder for saving files
-- To let users choose backup folder
-- To let users pick files to upload
-etc...
+# Some Example Usages
+- Ask users to select folder for saving your app's files.
+- Ask users to point a folder to import / export data.
+- Ask users to choose file from phone storage for viewing, editing or any process.
 
 # Screenshots
 
@@ -22,7 +21,7 @@ etc...
 
 For your convenience, it is available on jCenter, So just add this in your app dependencies:
 ```gradle
-    compile 'lib.kashif:folderpicker:2.2'
+    compile 'lib.kashif:folderpicker:2.4'
 ```
   
 # Usage
@@ -72,17 +71,10 @@ Cusstomization options can be passed as extras to FolderPicker activity.
 
 ## License
 
-    Copyright 2017 Kashif Anwaar.
+    Copyleft 2017 Kashif Anwaar.
+    
+    Licensed under Apache 2.0
+    
+    Do whatever you want with this library.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
 
