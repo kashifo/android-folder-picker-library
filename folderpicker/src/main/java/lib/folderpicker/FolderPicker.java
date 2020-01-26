@@ -20,6 +20,10 @@ import java.util.Comparator;
 
 public class FolderPicker extends Activity {
 
+    public static final String EXTRA_DATA = "data";
+    public static final String EXTRA_TITLE = "title";
+    public static final String EXTRA_LOCATION = "location";
+    public static final String EXTRA_PICK_FILES = "pickFiles";
     //Folders and Files have separate lists because we show all folders first then files
     ArrayList<FilePojo> folderAndFileList;
     ArrayList<FilePojo> foldersList;
@@ -38,7 +42,7 @@ public class FolderPicker extends Activity {
         setContentView(R.layout.fp_main_layout);
 
         if (!isExternalStorageReadable()) {
-            Toast.makeText(this, "Storage access permission not given", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.no_access_to_storage), Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -48,15 +52,15 @@ public class FolderPicker extends Activity {
         try {
             receivedIntent = getIntent();
 
-            if (receivedIntent.hasExtra("title")) {
-                String receivedTitle = receivedIntent.getExtras().getString("title");
+            if (receivedIntent.hasExtra(EXTRA_TITLE)) {
+                String receivedTitle = receivedIntent.getStringExtra(EXTRA_TITLE);
                 if (receivedTitle != null) {
                     tv_title.setText(receivedTitle);
                 }
             }
 
-            if (receivedIntent.hasExtra("location")) {
-                String reqLocation = receivedIntent.getExtras().getString("location");
+            if (receivedIntent.hasExtra(EXTRA_LOCATION)) {
+                String reqLocation = receivedIntent.getStringExtra(EXTRA_LOCATION);
                 if (reqLocation != null) {
                     File requestedFolder = new File(reqLocation);
                     if (requestedFolder.exists())
@@ -64,8 +68,8 @@ public class FolderPicker extends Activity {
                 }
             }
 
-            if (receivedIntent.hasExtra("pickFiles")) {
-                pickFiles = receivedIntent.getExtras().getBoolean("pickFiles");
+            if (receivedIntent.hasExtra(EXTRA_PICK_FILES)) {
+                pickFiles = receivedIntent.getBooleanExtra(EXTRA_PICK_FILES, false);
                 if (pickFiles) {
                     findViewById(R.id.fp_btn_select).setVisibility(View.GONE);
                     findViewById(R.id.fp_btn_new).setVisibility(View.GONE);
@@ -98,7 +102,7 @@ public class FolderPicker extends Activity {
             if (!folder.isDirectory())
                 exit();
 
-            tv_location.setText("Location : " + folder.getAbsolutePath());
+            tv_location.setText(String.format(getString(R.string.location_mask), folder.getAbsolutePath()));
             File[] files = folder.listFiles();
 
             foldersList = new ArrayList<>();
@@ -168,7 +172,7 @@ public class FolderPicker extends Activity {
 
         if (pickFiles && !folderAndFileList.get(position).isFolder()) {
             String data = location + File.separator + folderAndFileList.get(position).getName();
-            receivedIntent.putExtra("data", data);
+            receivedIntent.putExtra(EXTRA_DATA, data);
             setResult(RESULT_OK, receivedIntent);
             finish();
         } else {
@@ -210,7 +214,7 @@ public class FolderPicker extends Activity {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Error:" + e.toString(), Toast.LENGTH_LONG)
+            Toast.makeText(this, String.format(getString(R.string.error_string_mask), e.toString()), Toast.LENGTH_LONG)
                     .show();
         }
 
@@ -218,19 +222,19 @@ public class FolderPicker extends Activity {
 
     public void newFolderDialog(View v) {
         AlertDialog dialog = new AlertDialog.Builder(this).create();
-        dialog.setTitle("Enter Folder Name");
+        dialog.setTitle(getString(R.string.enter_folder_name));
 
         final EditText et = new EditText(this);
         dialog.setView(et);
 
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Create",
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.create),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         createNewFolder(et.getText().toString());
                     }
                 });
-        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -246,9 +250,9 @@ public class FolderPicker extends Activity {
     public void select(View v) {
 
         if (pickFiles) {
-            Toast.makeText(this, "You have to select a file", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.select_file), Toast.LENGTH_LONG).show();
         } else if (receivedIntent != null) {
-            receivedIntent.putExtra("data", location);
+            receivedIntent.putExtra(EXTRA_DATA, location);
             setResult(RESULT_OK, receivedIntent);
             finish();
         }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cancel">Отмена</string>
+    <string name="location">Расположение</string>
+    <string name="neww">Создать</string>
+    <string name="select">Выбрать</string>
+    <string name="up">Выше</string>
+    <string name="title">Выбрать каталог</string>
+    <string name="enter_folder_name">Введите имя каталога</string>
+    <string name="create">Создать</string>
+    <string name="select_file">Выберите файл</string>
+    <string name="no_access_to_storage">Нет доступа к хранилищу</string>
+    <string name="location_mask">Путь: %s</string>
+    <string name="error_string_mask">Ошибка: %s</string>
+</resources>
