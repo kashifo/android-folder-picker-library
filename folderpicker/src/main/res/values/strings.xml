@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Folder Picker</string>
+    <string name="app_name" translatable="false">Folder Picker</string>
     <string name="up">Up</string>
     <string name="neww">New</string>
     <string name="select">Select</string>
