@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -20,21 +21,28 @@ import java.util.Comparator;
 
 public class FolderPicker extends Activity {
 
+    Comparator<FilePojo> comparatorAscending = new Comparator<FilePojo>() {
+        @Override
+        public int compare(FilePojo f1, FilePojo f2) {
+            return f1.getName().compareTo(f2.getName());
+        }
+    };
+
     public static final String EXTRA_DATA = "data";
     public static final String EXTRA_TITLE = "title";
     public static final String EXTRA_LOCATION = "location";
     public static final String EXTRA_PICK_FILES = "pickFiles";
     //Folders and Files have separate lists because we show all folders first then files
-    ArrayList<FilePojo> folderAndFileList;
-    ArrayList<FilePojo> foldersList;
-    ArrayList<FilePojo> filesList;
+    ArrayList<FilePojo> mFolderAndFileList;
+    ArrayList<FilePojo> mFoldersList;
+    ArrayList<FilePojo> mFilesList;
 
-    TextView tv_title;
-    TextView tv_location;
+    TextView mTvTitle;
+    TextView mTvLocation;
 
-    String location = Environment.getExternalStorageDirectory().getAbsolutePath();
-    boolean pickFiles;
-    Intent receivedIntent;
+    String mLocation = Environment.getExternalStorageDirectory().getAbsolutePath();
+    boolean mPickFiles;
+    Intent mReceivedIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,31 +54,31 @@ public class FolderPicker extends Activity {
             finish();
         }
 
-        tv_title = (TextView) findViewById(R.id.fp_tv_title);
-        tv_location = (TextView) findViewById(R.id.fp_tv_location);
+        mTvTitle = findViewById(R.id.fp_tv_title);
+        mTvLocation = findViewById(R.id.fp_tv_location);
 
         try {
-            receivedIntent = getIntent();
+            mReceivedIntent = getIntent();
 
-            if (receivedIntent.hasExtra(EXTRA_TITLE)) {
-                String receivedTitle = receivedIntent.getStringExtra(EXTRA_TITLE);
+            if (mReceivedIntent.hasExtra(EXTRA_TITLE)) {
+                String receivedTitle = mReceivedIntent.getStringExtra(EXTRA_TITLE);
                 if (receivedTitle != null) {
-                    tv_title.setText(receivedTitle);
+                    mTvTitle.setText(receivedTitle);
                 }
             }
 
-            if (receivedIntent.hasExtra(EXTRA_LOCATION)) {
-                String reqLocation = receivedIntent.getStringExtra(EXTRA_LOCATION);
+            if (mReceivedIntent.hasExtra(EXTRA_LOCATION)) {
+                String reqLocation = mReceivedIntent.getStringExtra(EXTRA_LOCATION);
                 if (reqLocation != null) {
                     File requestedFolder = new File(reqLocation);
                     if (requestedFolder.exists())
-                        location = reqLocation;
+                        mLocation = reqLocation;
                 }
             }
 
-            if (receivedIntent.hasExtra(EXTRA_PICK_FILES)) {
-                pickFiles = receivedIntent.getBooleanExtra(EXTRA_PICK_FILES, false);
-                if (pickFiles) {
+            if (mReceivedIntent.hasExtra(EXTRA_PICK_FILES)) {
+                mPickFiles = mReceivedIntent.getBooleanExtra(EXTRA_PICK_FILES, false);
+                if (mPickFiles) {
                     findViewById(R.id.fp_btn_select).setVisibility(View.GONE);
                     findViewById(R.id.fp_btn_new).setVisibility(View.GONE);
                 }
@@ -80,8 +88,7 @@ public class FolderPicker extends Activity {
             e.printStackTrace();
         }
 
-        loadLists(location);
-
+        loadLists(mLocation);
     }
 
     /* Checks if external storage is available to at least read */
@@ -96,37 +103,36 @@ public class FolderPicker extends Activity {
 
     void loadLists(String location) {
         try {
-
             File folder = new File(location);
 
             if (!folder.isDirectory())
                 exit();
 
-            tv_location.setText(String.format(getString(R.string.location_mask), folder.getAbsolutePath()));
+            mTvLocation.setText(String.format(getString(R.string.location_mask), folder.getAbsolutePath()));
             File[] files = folder.listFiles();
 
-            foldersList = new ArrayList<>();
-            filesList = new ArrayList<>();
+            mFoldersList = new ArrayList<>();
+            mFilesList = new ArrayList<>();
 
             for (File currentFile : files) {
                 if (currentFile.isDirectory()) {
                     FilePojo filePojo = new FilePojo(currentFile.getName(), true);
-                    foldersList.add(filePojo);
+                    mFoldersList.add(filePojo);
                 } else {
                     FilePojo filePojo = new FilePojo(currentFile.getName(), false);
-                    filesList.add(filePojo);
+                    mFilesList.add(filePojo);
                 }
             }
 
             // sort & add to final List - as we show folders first add folders first to the final list
-            Collections.sort(foldersList, comparatorAscending);
-            folderAndFileList = new ArrayList<>();
-            folderAndFileList.addAll(foldersList);
+            Collections.sort(mFoldersList, comparatorAscending);
+            mFolderAndFileList = new ArrayList<>();
+            mFolderAndFileList.addAll(mFoldersList);
 
             //if we have to show files, then add files also to the final list
-            if (pickFiles) {
-                Collections.sort( filesList, comparatorAscending );
-                folderAndFileList.addAll(filesList);
+            if (mPickFiles) {
+                Collections.sort(mFilesList, comparatorAscending );
+                mFolderAndFileList.addAll(mFilesList);
             }
 
             showList();
@@ -135,21 +141,11 @@ public class FolderPicker extends Activity {
             e.printStackTrace();
         }
 
-    } // load List
-
-
-    Comparator<FilePojo> comparatorAscending = new Comparator<FilePojo>() {
-        @Override
-        public int compare(FilePojo f1, FilePojo f2) {
-            return f1.getName().compareTo(f2.getName());
-        }
-    };
-
+    }
 
     void showList() {
-
         try {
-            FolderAdapter FolderAdapter = new FolderAdapter(this, folderAndFileList);
+            FolderAdapter FolderAdapter = new FolderAdapter(this, mFolderAndFileList);
             ListView listView = (ListView) findViewById(R.id.fp_listView);
             listView.setAdapter(FolderAdapter);
 
@@ -160,26 +156,22 @@ public class FolderPicker extends Activity {
                     listClick(position);
                 }
             });
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
     void listClick(int position) {
-
-        if (pickFiles && !folderAndFileList.get(position).isFolder()) {
-            String data = location + File.separator + folderAndFileList.get(position).getName();
-            receivedIntent.putExtra(EXTRA_DATA, data);
-            setResult(RESULT_OK, receivedIntent);
+        if (mPickFiles && !mFolderAndFileList.get(position).isFolder()) {
+            String data = mLocation + File.separator + mFolderAndFileList.get(position).getName();
+            mReceivedIntent.putExtra(EXTRA_DATA, data);
+            setResult(RESULT_OK, mReceivedIntent);
             finish();
         } else {
-            location = location + File.separator + folderAndFileList.get(position).getName();
-            loadLists(location);
+            mLocation = mLocation + File.separator + mFolderAndFileList.get(position).getName();
+            loadLists(mLocation);
         }
-
     }
 
     @Override
@@ -188,45 +180,44 @@ public class FolderPicker extends Activity {
     }
 
     public void goBack(View v) {
-
-        if (location != null && !location.equals("") && !location.equals("/")) {
-            int start = location.lastIndexOf('/');
-            String newLocation = location.substring(0, start);
-            location = newLocation;
-            loadLists(location);
-        }else{
+        if (mLocation != null && !mLocation.equals("") && !mLocation.equals("/")) {
+            int start = mLocation.lastIndexOf('/');
+            String newLocation = mLocation.substring(0, start);
+            mLocation = newLocation;
+            loadLists(mLocation);
+        } else {
             exit();
         }
-
     }
 
-    void exit(){
-        setResult(RESULT_CANCELED, receivedIntent);
+    void exit() {
+        setResult(RESULT_CANCELED, mReceivedIntent);
         finish();
     }
 
     void createNewFolder(String filename) {
         try {
-
-            File file = new File(location + File.separator + filename);
+            File file = new File(mLocation + File.separator + filename);
             file.mkdirs();
-            loadLists(location);
+            loadLists(mLocation);
 
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, String.format(getString(R.string.error_string_mask), e.toString()), Toast.LENGTH_LONG)
                     .show();
         }
-
     }
 
     public void newFolderDialog(View v) {
-        AlertDialog dialog = new AlertDialog.Builder(this).create();
-        dialog.setTitle(getString(R.string.enter_folder_name));
+        LayoutInflater inflater = LayoutInflater.from(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = inflater.inflate(R.layout.dialog_folder_name, null);
+        builder.setView(view);
+        builder.setTitle(getString(R.string.enter_folder_name));
 
-        final EditText et = new EditText(this);
-        dialog.setView(et);
+        final EditText et = view.findViewById(R.id.edit_text);
 
+        final AlertDialog dialog = builder.create();
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.create),
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -234,34 +225,24 @@ public class FolderPicker extends Activity {
                         createNewFolder(et.getText().toString());
                     }
                 });
-        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-
-                    }
-                });
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), (DialogInterface.OnClickListener)null);
 
         dialog.show();
-
     }
-
 
     public void select(View v) {
 
-        if (pickFiles) {
+        if (mPickFiles) {
             Toast.makeText(this, getString(R.string.select_file), Toast.LENGTH_LONG).show();
-        } else if (receivedIntent != null) {
-            receivedIntent.putExtra(EXTRA_DATA, location);
-            setResult(RESULT_OK, receivedIntent);
+        } else if (mReceivedIntent != null) {
+            mReceivedIntent.putExtra(EXTRA_DATA, mLocation);
+            setResult(RESULT_OK, mReceivedIntent);
             finish();
         }
     }
-
 
     public void cancel(View v) {
         exit();
     }
 
-
-} // class
+}
