@@ -7,7 +7,9 @@
     <string name="up">Выше</string>
     <string name="title">Выбрать каталог</string>
     <string name="enter_folder_name">Введите имя каталога</string>
+    <string name="edit_location">Введите путь</string>
     <string name="create">Создать</string>
+    <string name="ok">Ok</string>
     <string name="select_file">Выберите файл</string>
     <string name="no_access_to_storage">Нет доступа к хранилищу</string>
     <string name="location_mask">Путь: %s</string>

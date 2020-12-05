@@ -8,7 +8,9 @@
     <string name="location">Location</string>
     <string name="allow_storage_permission">Allow permissions to view files</string>
     <string name="enter_folder_name">Enter folder name</string>
+    <string name="edit_location">Edit location</string>
     <string name="create">Create</string>
+    <string name="ok">Ok</string>
     <string name="select_file">You have to select a file</string>
     <string name="no_access_to_storage">Storage access permission not given</string>
     <string name="location_mask">Location: %s</string>

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
@@ -14,24 +14,42 @@
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="#333" />
 
-
     <TextView
         android:id="@+id/fp_tv_location"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/fp_tv_title"
+        android:layout_toLeftOf="@id/btn_edit_location"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:gravity="left"
-        android:padding="5dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:text="Current Location"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#333" />
 
+    <ImageButton
+        android:id="@+id/btn_edit_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/fp_tv_title"
+        android:padding="5dp"
+        android:background="@android:color/transparent"
+        android:onClick="edit"
+        android:src="@android:drawable/ic_menu_edit"/>
 
     <LinearLayout
         android:id="@+id/fp_buttonsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/fp_tv_location"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="5sp">
@@ -105,7 +123,7 @@
     <ListView
         android:id="@+id/fp_listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fp_buttonsLayout" />
 
-
-</LinearLayout>
+</RelativeLayout>

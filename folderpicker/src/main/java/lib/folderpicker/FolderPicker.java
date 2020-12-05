@@ -245,4 +245,31 @@ public class FolderPicker extends Activity {
         exit();
     }
 
+    public void edit(View v) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = inflater.inflate(R.layout.dialog_edit_location, null);
+        builder.setView(view);
+        builder.setTitle(getString(R.string.edit_location));
+
+        final EditText et = view.findViewById(R.id.edit_text);
+        if (mLocation != null) {
+            et.setText(mLocation);
+            et.setSelection(mLocation.length());
+        }
+
+        final AlertDialog dialog = builder.create();
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        mLocation = et.getText().toString();
+                        loadLists(mLocation);
+                    }
+                });
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), (DialogInterface.OnClickListener)null);
+
+        dialog.show();
+    }
+
 }
