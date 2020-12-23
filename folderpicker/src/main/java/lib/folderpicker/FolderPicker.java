@@ -30,19 +30,21 @@ public class FolderPicker extends Activity {
 
     public static final String EXTRA_DATA = "data";
     public static final String EXTRA_TITLE = "title";
+    public static final String EXTRA_DESCRIPTION = "desc";
     public static final String EXTRA_LOCATION = "location";
     public static final String EXTRA_PICK_FILES = "pickFiles";
+    public static final String EXTRA_EMPTY_FOLDER = "emptyFolder";
     //Folders and Files have separate lists because we show all folders first then files
     ArrayList<FilePojo> mFolderAndFileList;
     ArrayList<FilePojo> mFoldersList;
     ArrayList<FilePojo> mFilesList;
 
-    TextView mTvTitle;
     TextView mTvLocation;
 
     String mLocation = Environment.getExternalStorageDirectory().getAbsolutePath();
     boolean mPickFiles;
     Intent mReceivedIntent;
+    boolean mEmptyFolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,25 +56,31 @@ public class FolderPicker extends Activity {
             finish();
         }
 
-        mTvTitle = findViewById(R.id.fp_tv_title);
         mTvLocation = findViewById(R.id.fp_tv_location);
 
         try {
             mReceivedIntent = getIntent();
 
             if (mReceivedIntent.hasExtra(EXTRA_TITLE)) {
-                String receivedTitle = mReceivedIntent.getStringExtra(EXTRA_TITLE);
-                if (receivedTitle != null) {
-                    mTvTitle.setText(receivedTitle);
+                String title = mReceivedIntent.getStringExtra(EXTRA_TITLE);
+                if (title != null) {
+                    ((TextView)findViewById(R.id.fp_tv_title)).setText(title);
+                }
+            }
+
+            if (mReceivedIntent.hasExtra(EXTRA_DESCRIPTION)) {
+                String desc = mReceivedIntent.getStringExtra(EXTRA_DESCRIPTION);
+                if (desc != null) {
+                    ((TextView)findViewById(R.id.fp_tv_desc)).setText(desc);
                 }
             }
 
             if (mReceivedIntent.hasExtra(EXTRA_LOCATION)) {
-                String reqLocation = mReceivedIntent.getStringExtra(EXTRA_LOCATION);
-                if (reqLocation != null) {
-                    File requestedFolder = new File(reqLocation);
+                String location = mReceivedIntent.getStringExtra(EXTRA_LOCATION);
+                if (location != null) {
+                    File requestedFolder = new File(location);
                     if (requestedFolder.exists())
-                        mLocation = reqLocation;
+                        mLocation = location;
                 }
             }
 
@@ -81,6 +89,13 @@ public class FolderPicker extends Activity {
                 if (mPickFiles) {
                     findViewById(R.id.fp_btn_select).setVisibility(View.GONE);
                     findViewById(R.id.fp_btn_new).setVisibility(View.GONE);
+                }
+            }
+
+            if (mReceivedIntent.hasExtra(EXTRA_EMPTY_FOLDER)) {
+                mEmptyFolder = mReceivedIntent.getBooleanExtra(EXTRA_EMPTY_FOLDER, false);
+                if (mEmptyFolder) {
+                    findViewById(R.id.fp_tv_empty_dir).setVisibility(View.VISIBLE);
                 }
             }
 
@@ -235,6 +250,9 @@ public class FolderPicker extends Activity {
         if (mPickFiles) {
             Toast.makeText(this, getString(R.string.select_file), Toast.LENGTH_LONG).show();
         } else if (mReceivedIntent != null) {
+            if (mEmptyFolder && !isDirEmpty(mLocation)) {
+                Toast.makeText(this, getString(R.string.select_empty_folder), Toast.LENGTH_LONG).show();
+            }
             mReceivedIntent.putExtra(EXTRA_DATA, mLocation);
             setResult(RESULT_OK, mReceivedIntent);
             finish();
@@ -270,6 +288,12 @@ public class FolderPicker extends Activity {
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), (DialogInterface.OnClickListener)null);
 
         dialog.show();
+    }
+
+    boolean isDirEmpty(String path) {
+        File dir = new File(path);
+        File[] childs = dir.listFiles();
+        return (childs == null || childs.length == 0);
     }
 
 }

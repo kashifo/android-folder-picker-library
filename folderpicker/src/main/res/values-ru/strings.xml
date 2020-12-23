@@ -11,7 +11,9 @@
     <string name="create">Создать</string>
     <string name="ok">Ok</string>
     <string name="select_file">Выберите файл</string>
+    <string name="select_empty_folder">Выберите пустой каталог</string>
     <string name="no_access_to_storage">Нет доступа к хранилищу</string>
     <string name="location_mask">Путь: %s</string>
     <string name="error_string_mask">Ошибка: %s</string>
+    <string name="select_empty_dir">Выберите пустой каталог</string>
 </resources>
