@@ -71,7 +71,9 @@ public class FolderPicker extends Activity {
             if (mReceivedIntent.hasExtra(EXTRA_DESCRIPTION)) {
                 String desc = mReceivedIntent.getStringExtra(EXTRA_DESCRIPTION);
                 if (desc != null) {
-                    ((TextView)findViewById(R.id.fp_tv_desc)).setText(desc);
+                    TextView textView = findViewById(R.id.fp_tv_desc);
+                    textView.setVisibility(View.VISIBLE);
+                    textView.setText(desc);
                 }
             }
 
