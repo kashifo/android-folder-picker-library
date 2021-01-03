@@ -254,6 +254,7 @@ public class FolderPicker extends Activity {
         } else if (mReceivedIntent != null) {
             if (mEmptyFolder && !isDirEmpty(mLocation)) {
                 Toast.makeText(this, getString(R.string.select_empty_folder), Toast.LENGTH_LONG).show();
+                return;
             }
             mReceivedIntent.putExtra(EXTRA_DATA, mLocation);
             setResult(RESULT_OK, mReceivedIntent);
