@@ -240,6 +240,11 @@ public class FolderPicker extends Activity {
         }
     }
 
+    public void home(View v) {
+        String location = Environment.getExternalStorageDirectory().getAbsolutePath();
+        checkAndLoadLists(location);
+    }
+
     /**
      * Create new folder.
      * @param filename

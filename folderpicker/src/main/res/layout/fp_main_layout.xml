@@ -27,6 +27,7 @@
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
+        android:gravity="center_horizontal"
         android:text="Description"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:visibility="gone"
@@ -41,11 +42,11 @@
         android:layout_marginStart="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginEnd="5dp"
-        android:gravity="center_horizontal"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
+        android:gravity="center_horizontal"
         android:text="@string/select_empty_dir"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:visibility="gone"
@@ -92,68 +93,41 @@
         android:padding="5sp">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
+            style="@style/ToolButtons"
             android:background="@drawable/fp_outline_black_1dp"
-            android:clickable="true"
+            android:drawableTop="@drawable/fp_ic_action_home"
+            android:onClick="home"
+            android:text="@string/home" />
+
+        <TextView
+            style="@style/ToolButtons"
+            android:background="@drawable/fp_outline_black_1dp"
             android:drawableTop="@drawable/fp_ic_action_up"
-            android:focusable="true"
-            android:gravity="center"
             android:onClick="goBack"
-            android:padding="5dp"
-            android:text="@string/up"
-            android:textColor="#333" />
+            android:text="@string/up" />
 
         <TextView
+            style="@style/ToolButtons"
             android:id="@+id/fp_btn_new"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
             android:background="@drawable/fp_outline_black_1dp"
-            android:clickable="true"
             android:drawableTop="@drawable/fp_ic_action_add"
-            android:focusable="true"
-            android:gravity="center"
             android:onClick="newFolderDialog"
-            android:padding="5dp"
-            android:text="@string/neww"
-            android:textColor="#333" />
+            android:text="@string/neww" />
 
         <TextView
+            style="@style/ToolButtons"
             android:id="@+id/fp_btn_select"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
             android:background="@drawable/fp_outline_black_1dp"
-            android:clickable="true"
             android:drawableTop="@drawable/fp_ic_action_back"
-            android:focusable="true"
-            android:gravity="center"
             android:onClick="select"
-            android:padding="5dp"
-            android:text="@string/select"
-            android:textColor="#333" />
+            android:text="@string/select" />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            style="@style/ToolButtons"
             android:background="@drawable/fp_outline_black_1dp"
-            android:clickable="true"
             android:drawableTop="@drawable/fp_ic_action_cancel"
-            android:focusable="true"
-            android:gravity="center"
             android:onClick="cancel"
-            android:padding="5dp"
-            android:text="@string/cancel"
-            android:textColor="#333" />
+            android:text="@string/cancel" />
 
     </LinearLayout>
 
