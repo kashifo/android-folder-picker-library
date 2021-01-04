@@ -41,7 +41,7 @@ public class FolderPicker extends Activity {
 
     TextView mTvLocation;
 
-    String mLocation = Environment.getExternalStorageDirectory().getAbsolutePath();
+    String mLocation;
     boolean mPickFiles;
     Intent mReceivedIntent;
     boolean mEmptyFolder;
@@ -55,6 +55,8 @@ public class FolderPicker extends Activity {
             Toast.makeText(this, getString(R.string.no_access_to_storage), Toast.LENGTH_LONG).show();
             finish();
         }
+
+        String location = Environment.getExternalStorageDirectory().getAbsolutePath();
 
         mTvLocation = findViewById(R.id.fp_tv_location);
 
@@ -78,11 +80,11 @@ public class FolderPicker extends Activity {
             }
 
             if (mReceivedIntent.hasExtra(EXTRA_LOCATION)) {
-                String location = mReceivedIntent.getStringExtra(EXTRA_LOCATION);
-                if (location != null) {
-                    File requestedFolder = new File(location);
-                    if (requestedFolder.exists())
-                        mLocation = location;
+                String newLocation = mReceivedIntent.getStringExtra(EXTRA_LOCATION);
+                if (newLocation != null) {
+                    File folder = new File(newLocation);
+                    if (folder.exists())
+                        location = newLocation;
                 }
             }
 
@@ -105,10 +107,12 @@ public class FolderPicker extends Activity {
             e.printStackTrace();
         }
 
-        loadLists(mLocation);
+        checkAndLoadLists(location);
     }
 
-    /* Checks if external storage is available to at least read */
+    /**
+     * Checks if external storage is available to at least read
+     */
     boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state) ||
@@ -118,19 +122,50 @@ public class FolderPicker extends Activity {
         return false;
     }
 
-    void loadLists(String location) {
-        try {
-            File folder = new File(location);
+    boolean checkAndLoadLists(String location, boolean showToast) {
+        if (checkLocation(location, showToast)) {
+            mLocation = location;
+            loadLists();
+            return true;
+        }
+        return false;
+    }
 
-            if (!folder.exists()) {
+    boolean checkAndLoadLists(String location) {
+        return checkAndLoadLists(location, true);
+    }
+
+    /**
+     * Check location and load lists if location is correct.
+     * @param location
+     * @param showToast
+     * @return
+     */
+    private boolean checkLocation(String location, boolean showToast) {
+        File folder = new File(location);
+
+        if (!folder.exists()) {
+            if (showToast) {
                 Toast.makeText(this, R.string.dir_is_not_exist, Toast.LENGTH_LONG).show();
-                return;
             }
+            return false;
+        }
 
-            if (!folder.isDirectory()) {
+        if (!folder.isDirectory()) {
+            if (showToast) {
                 Toast.makeText(this, R.string.is_not_dir, Toast.LENGTH_LONG).show();
-                return;
             }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Load lists and show.
+     */
+    void loadLists() {
+        try {
+            File folder = new File(mLocation);
 
             mTvLocation.setText(String.format(getString(R.string.location_mask), folder.getAbsolutePath()));
             File[] files = folder.listFiles();
@@ -167,6 +202,9 @@ public class FolderPicker extends Activity {
 
     }
 
+    /**
+     * Show list of folders and files.
+     */
     void showList() {
         try {
             FolderAdapter FolderAdapter = new FolderAdapter(this, mFolderAndFileList);
@@ -185,7 +223,10 @@ public class FolderPicker extends Activity {
         }
     }
 
-
+    /**
+     * Click on the list item.
+     * @param position
+     */
     void listClick(int position) {
         if (mPickFiles && !mFolderAndFileList.get(position).isFolder()) {
             String data = mLocation + File.separator + mFolderAndFileList.get(position).getName();
@@ -193,37 +234,21 @@ public class FolderPicker extends Activity {
             setResult(RESULT_OK, mReceivedIntent);
             finish();
         } else {
-            mLocation = mLocation + File.separator + mFolderAndFileList.get(position).getName();
-            loadLists(mLocation);
+            String location = mLocation + File.separator + mFolderAndFileList.get(position).getName();
+            checkAndLoadLists(location);
+//            checkAndloadLists(mLocation);
         }
     }
 
-    @Override
-    public void onBackPressed(){
-        goBack(null);
-    }
-
-    public void goBack(View v) {
-        if (mLocation != null && !mLocation.equals("") && !mLocation.equals("/")) {
-            int start = mLocation.lastIndexOf('/');
-            String newLocation = mLocation.substring(0, start);
-            mLocation = newLocation;
-            loadLists(mLocation);
-        } else {
-            exit();
-        }
-    }
-
-    void exit() {
-        setResult(RESULT_CANCELED, mReceivedIntent);
-        finish();
-    }
-
+    /**
+     * Create new folder.
+     * @param filename
+     */
     void createNewFolder(String filename) {
         try {
             File file = new File(mLocation + File.separator + filename);
             file.mkdirs();
-            loadLists(mLocation);
+            checkAndLoadLists(mLocation);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -232,6 +257,10 @@ public class FolderPicker extends Activity {
         }
     }
 
+    /**
+     * Show dialog fom enter new folder name;
+     * @param v
+     */
     public void newFolderDialog(View v) {
         LayoutInflater inflater = LayoutInflater.from(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -254,6 +283,10 @@ public class FolderPicker extends Activity {
         dialog.show();
     }
 
+    /**
+     * Select the destination folder or file.
+     * @param v
+     */
     public void select(View v) {
 
         if (mPickFiles) {
@@ -269,10 +302,10 @@ public class FolderPicker extends Activity {
         }
     }
 
-    public void cancel(View v) {
-        exit();
-    }
-
+    /**
+     * Edit path manually.
+     * @param v
+     */
     public void edit(View v) {
         LayoutInflater inflater = LayoutInflater.from(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -291,8 +324,9 @@ public class FolderPicker extends Activity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        mLocation = et.getText().toString();
-                        loadLists(mLocation);
+                        String location = et.getText().toString();
+//                        loadLists(mLocation);
+                        checkAndLoadLists(location);
                     }
                 });
         dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), (DialogInterface.OnClickListener)null);
@@ -300,10 +334,49 @@ public class FolderPicker extends Activity {
         dialog.show();
     }
 
+    /**
+     * Check if folder is empty.
+     * @param path
+     * @return
+     */
     boolean isDirEmpty(String path) {
         File dir = new File(path);
         File[] childs = dir.listFiles();
         return (childs == null || childs.length == 0);
     }
 
+    @Override
+    public void onBackPressed(){
+        goBack(null);
+    }
+
+    /**
+     * Load upper level path or exit.
+     * @param v
+     */
+    public void goBack(View v) {
+        if (mLocation != null && !mLocation.equals("") && !mLocation.equals("/")) {
+            int start = mLocation.lastIndexOf('/');
+            String newLocation = mLocation.substring(0, start);
+//            mLocation = newLocation;
+//            loadLists(newLocation);
+            if (!checkAndLoadLists(newLocation, false)) {
+                exit();
+            }
+        } else {
+            exit();
+        }
+    }
+
+    public void cancel(View v) {
+        exit();
+    }
+
+    /**
+     * Set result and finish activity.
+     */
+    void exit() {
+        setResult(RESULT_CANCELED, mReceivedIntent);
+        finish();
+    }
 }
