@@ -16,4 +16,6 @@
     <string name="location_mask">Путь: %s</string>
     <string name="error_string_mask">Ошибка: %s</string>
     <string name="select_empty_dir">Выберите пустой каталог</string>
+    <string name="is_not_dir">Это не каталог</string>
+    <string name="dir_is_not_exist">Каталог не существует</string>
 </resources>

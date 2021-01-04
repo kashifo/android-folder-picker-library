@@ -122,8 +122,15 @@ public class FolderPicker extends Activity {
         try {
             File folder = new File(location);
 
-            if (!folder.isDirectory())
-                exit();
+            if (!folder.exists()) {
+                Toast.makeText(this, R.string.dir_is_not_exist, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (!folder.isDirectory()) {
+                Toast.makeText(this, R.string.is_not_dir, Toast.LENGTH_LONG).show();
+                return;
+            }
 
             mTvLocation.setText(String.format(getString(R.string.location_mask), folder.getAbsolutePath()));
             File[] files = folder.listFiles();
@@ -163,7 +170,7 @@ public class FolderPicker extends Activity {
     void showList() {
         try {
             FolderAdapter FolderAdapter = new FolderAdapter(this, mFolderAndFileList);
-            ListView listView = (ListView) findViewById(R.id.fp_listView);
+            ListView listView = findViewById(R.id.fp_listView);
             listView.setAdapter(FolderAdapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -6,7 +6,6 @@
     <string name="cancel">Cancel</string>
     <string name="title">Select folder</string>
     <string name="location">Location</string>
-    <string name="allow_storage_permission">Allow permissions to view files</string>
     <string name="enter_folder_name">Enter folder name</string>
     <string name="edit_location">Edit location</string>
     <string name="create">Create</string>
@@ -17,4 +16,6 @@
     <string name="location_mask">Location: %s</string>
     <string name="error_string_mask">Error: %s</string>
     <string name="select_empty_dir">Select an empty directory</string>
+    <string name="is_not_dir">This is not a directory</string>
+    <string name="dir_is_not_exist">Directory does not exist</string>
 </resources>
