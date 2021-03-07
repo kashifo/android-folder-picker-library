@@ -1,6 +1,6 @@
 package lib.folderpicker;
 
-import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,35 +12,43 @@ import java.util.ArrayList;
 
 public class FolderAdapter extends ArrayAdapter<FilePojo> {
 
-	Activity context;
-	ArrayList<FilePojo> dataList;
+	/**
+	 *
+	 */
+	private class FileViewHolder {
+		ImageView iconView;
+		TextView nameView;
+	}
 
-	public FolderAdapter(Activity context, ArrayList<FilePojo> dataList) {
+	private LayoutInflater mInflater;
+	private Context mContext;
+	private ArrayList<FilePojo> dataList;
 
+	public FolderAdapter(Context context, ArrayList<FilePojo> dataList) {
 		super(context, R.layout.fp_filerow, dataList);
-		this.context = context;
+		this.mContext = context;
+		this.mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.dataList = dataList;
 
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = context.getLayoutInflater();
-		convertView = inflater.inflate(R.layout.fp_filerow, parent, false);
-
-		ImageView imageView = (ImageView) convertView.findViewById(R.id.fp_iv_icon);
-		TextView name = (TextView) convertView.findViewById(R.id.fp_tv_name);
-		
-		if( dataList.get(position).isFolder() )
-		{
-			imageView.setImageResource( R.drawable.fp_folder);
-		}
-		else
-		{
-			imageView.setImageResource( R.drawable.fp_file);
+		FileViewHolder viewHolder;
+		if (convertView == null) {
+			viewHolder = new FileViewHolder();
+			convertView = mInflater.inflate(R.layout.fp_filerow, null);
+			viewHolder.iconView = convertView.findViewById(R.id.fp_iv_icon);
+			viewHolder.nameView = convertView.findViewById(R.id.fp_tv_name);
+			convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (FileViewHolder) convertView.getTag();
 		}
 
-		name.setText( dataList.get(position).getName() );
+		FilePojo item = dataList.get(position);
+		int iconRes = (item.isFolder()) ? R.drawable.fp_folder : R.drawable.fp_file;
+		viewHolder.iconView.setImageResource(iconRes);
+		viewHolder.nameView.setText(item.getName());
 
 		return convertView;
 	}
